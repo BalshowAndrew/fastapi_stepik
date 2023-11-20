@@ -1,21 +1,25 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
 import uvicorn
+
+from models.models import User
 
 app = FastAPI()
 
 
-class User(BaseModel):
-    username: str
-    age: int
-    message: str
-    
+first_user = User(name="John Doe", id=1)
+
 
 @app.post("/")
 async def root(user: User):
-    print(f"Мы получили от юзера {user.username}, которому {user.age} такое сообщение: {user.message}")
+    print(f"У юзера {user.name} такой id: {user.id}")
     return user
+
+
+@app.get("/users", response_model=User)
+async def users():
+    return first_user
+
 
 @app.get("/index", response_class=FileResponse)
 async def root_index():
