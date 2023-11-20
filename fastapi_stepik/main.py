@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import uvicorn
 
-from models.models import User
+from models.models import User, User_age
 
 app = FastAPI()
 
@@ -19,6 +19,14 @@ async def root(user: User):
 @app.get("/users", response_model=User)
 async def users():
     return first_user
+
+
+@app.post("/user")
+async def user_age(user: User_age):
+    return{"name": user.name,
+           "age": user.age,
+           "is_adult": user.age >= 18}
+
 
 
 @app.get("/index", response_class=FileResponse)
