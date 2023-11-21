@@ -2,12 +2,13 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import uvicorn
 
-from models.models import User, User_age
+from models.models import User, User_age, UserInfo
 
 app = FastAPI()
 
 
-first_user = User(name="John Doe", id=1)
+fake_db = [{"username": "vasya", "user_info": "любит колбасу"},
+           {"username": "katya", "user_info": "любит петь"}]
 
 
 @app.post("/")
@@ -16,9 +17,15 @@ async def root(user: User):
     return user
 
 
-@app.get("/users", response_model=User)
-async def users():
-    return first_user
+@app.get("/users")
+async def get_all_users():
+    return fake_db
+
+
+@app.post("/add_user", response_model=UserInfo) # тут указали модель (ормат) ответа
+async def add_user(user: UserInfo): # тут проверяем входные данных на соответствие модели
+    fake_db.append({"username": user.username, "user_info": user.user_info}) # тут добавили юзера в фейковую базу данных
+    return user
 
 
 @app.post("/user")

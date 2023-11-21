@@ -11,3 +11,9 @@ class User_age(BaseModel):
     age: int
 
 
+class UserInfo(BaseModel):
+    username: str
+    user_info: str
+
+
+
