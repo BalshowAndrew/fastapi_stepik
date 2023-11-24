@@ -16,4 +16,6 @@ class UserInfo(BaseModel):
     user_info: str
 
 
-
+class Feedback(BaseModel):
+    name: str
+    message: str

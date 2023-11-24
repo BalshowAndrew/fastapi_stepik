@@ -1,8 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import uvicorn
+import json
+from pathlib import Path
 
-from models.models import User, User_age, UserInfo
+from models.models import User, User_age, UserInfo, Feedback
+
+
 
 app = FastAPI()
 
@@ -63,6 +67,33 @@ async def root_calculate(num1: int, num2: int):
 @app.get("/custom")
 async def read_custom_message():
     return {"message": "This is a custom message!"}
+
+
+
+def save_json(file: str, to_json: dict) -> None:
+    with open(file, "w", encoding="utf-8") as f:
+        json.dump(to_json, f, indent=4, ensure_ascii=False, separators=(',', ': '))
+
+
+def load_json(file_name: str) -> dict:
+    try:
+        with open(file_name, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {"user_msg": []}
+
+
+Path('data.json').touch()
+data = load_json("data.json")
+print(data)
+
+
+@app.post("/feedback")
+async def user_feedback(msg: Feedback):
+    data["user_msg"].append({"name": msg.name, "message": msg.message})
+    save_json("data.json", data)
+    return {"message": f"Feedback received. Thank you, {msg.name}!"}
+
 
 
 
