@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 import uvicorn
 import json
 from pathlib import Path
+from typing import Annotated
 
 from models.models import User, User_age, UserInfo, Feedback, Item
 
@@ -108,8 +109,22 @@ async def read_items() -> list[Item]:
         Item(name="Plumbus", price=32.0)
     ]
 
+# Скачивание файлов
+@app.get("/files/download")
+async def dounload_file():
+    return FileResponse(path='fastapi_stepik/index.html', filename="Индекс.html")
 
 
+
+# Отправка файлов на сервер
+@app.post("/files")
+async def create_file(file: Annotated[bytes, File()]):
+    return {"file_size": len(file)}
+
+
+@app.post("/uploadfile")
+async def create_upload_file(file: UploadFile):
+    return {"filename": file.filename}
 
 
 
