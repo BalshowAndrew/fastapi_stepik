@@ -19,3 +19,12 @@ class UserInfo(BaseModel):
 class Feedback(BaseModel):
     name: str
     message: str
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+    tags: list[str] = []
+

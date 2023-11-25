@@ -4,7 +4,7 @@ import uvicorn
 import json
 from pathlib import Path
 
-from models.models import User, User_age, UserInfo, Feedback
+from models.models import User, User_age, UserInfo, Feedback, Item
 
 
 
@@ -93,6 +93,22 @@ async def user_feedback(msg: Feedback):
     data["user_msg"].append({"name": msg.name, "message": msg.message})
     save_json("data.json", data)
     return {"message": f"Feedback received. Thank you, {msg.name}!"}
+
+
+
+@app.post("/items")
+async def create_item(item: Item):
+    return item
+
+
+@app.get("/items")
+async def read_items() -> list[Item]:
+    return [
+        Item(name="Portal Gun", price=42.0),
+        Item(name="Plumbus", price=32.0)
+    ]
+
+
 
 
 
