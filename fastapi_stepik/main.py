@@ -85,7 +85,7 @@ def load_json(file_name: str) -> dict:
 
 Path('data.json').touch()
 data = load_json("data.json")
-print(data)
+# print(data)
 
 
 @app.post("/feedback")
